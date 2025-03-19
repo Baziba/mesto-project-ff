@@ -5,36 +5,39 @@ const cardTemplate = document.querySelector('#card-template').content;
 const placesListEl = document.querySelector('.places__list');
 
 // @todo: Функция создания карточки
+
 /**
  * 
  * @param {string} link Ссылка на изображение
- * @param {string} name Название
+ * @param {string} name Наименование
+ * @param {function} removeCard Функция удаления карточки
+ * @returns {Node}
  */
-function addCard(link, name) {
+const createCard = (link, name, removeCard) => {
   const cardEl = cardTemplate.querySelector('.card').cloneNode(true);
   const cardTitleEl = cardEl.querySelector('.card__title');
   const cardImageEl = cardEl.querySelector('.card__image');
   const cardDeleteButton = cardEl.querySelector('.card__delete-button');
 
   cardTitleEl.innerText = name;
-  cardImageEl.setAttribute('src', link);
+  cardImageEl.src = link;
+  cardImageEl.alt = `Фотография места: ${name}`;
 
-  cardDeleteButton.addEventListener('click', () => {
-    removeCard(cardEl);
-  });
+  cardDeleteButton.addEventListener('click', () => { removeCard(cardEl); });
 
-  placesListEl.append(cardEl);
+  return cardEl;
 }
 
+
 // @todo: Функция удаления карточки
-function removeCard(card) {
+const removeCard = card => {
   card.remove();
 }
 
 // @todo: Вывести карточки на страницу
-function initCards(initialCards) {
+const initCards = initialCards => {
   initialCards.forEach(card => {
-    addCard(card.link, card.name)
+    placesListEl.append(createCard(card.link, card.name, removeCard));
   });
 }
 
