@@ -3,13 +3,8 @@
  * @param {Element} el Попап, который нужно открыть
  */
 const openModal = (el) => {
-  const popupCloseButton = el.querySelector('.popup__close');
-
-  popupCloseButton.addEventListener('click', handleCloseButton);
-  el.addEventListener('click', handleOverlayClick);
   document.addEventListener('keyup', handleEscKey);
   el.classList.add('popup_is-opened');
-
 }
 
 /**
@@ -17,7 +12,9 @@ const openModal = (el) => {
  * @param {Event} evt 
  */
 const handleOverlayClick = (evt) => {
-  if (evt.target.classList.contains('popup')) closeModal(evt.target)
+  if (evt.target.classList.contains('popup')) {
+    closeModal(evt.target)
+  };
 }
 
 /**
@@ -27,16 +24,18 @@ const handleOverlayClick = (evt) => {
 const handleEscKey = (evt) => {
   if (evt.key === 'Escape') {
     const activePopup = document.querySelector('.popup_is-opened');
-    if (null !== activePopup) closeModal(activePopup);
+    if (null !== activePopup) {
+      closeModal(activePopup)
+    };
   }
 }
 
 /**
  * Обработчик клика по кнопке закрытия
- * @param {Event} evt 
+ * @param {Element} popup 
  */
-const handleCloseButton = (evt) => {
-  closeModal(evt.target.parentNode.parentNode);
+const handleCloseButton = (popup) => {
+  closeModal(popup);
 }
 
 /**
@@ -49,4 +48,4 @@ const closeModal = (el) => {
 }
 
 
-export { openModal, closeModal }
+export { openModal, closeModal, handleCloseButton, handleOverlayClick }

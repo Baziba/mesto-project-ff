@@ -1,6 +1,5 @@
 
 const cardTemplate = document.querySelector('#card-template').content;
-const placesListEl = document.querySelector('.places__list');
 
 /**
  * Функция создания карточки
@@ -8,9 +7,10 @@ const placesListEl = document.querySelector('.places__list');
  * @param {string} name Наименование
  * @param {Function} removeCallback Функция удаления карточки
  * @param {Function} likeCallback Функция лайка карточки
+ * @param {Function} zoomCallback Функция зума при клике на карточку
  * @returns {Node}
  */
-const createCard = (link, name, removeCallback, likeCallback) => {
+const createCard = (link, name, removeCallback, likeCallback, zoomCallback) => {
   const cardEl = cardTemplate.querySelector('.card').cloneNode(true);
   const cardTitleEl = cardEl.querySelector('.card__title');
   const cardImageEl = cardEl.querySelector('.card__image');
@@ -21,6 +21,7 @@ const createCard = (link, name, removeCallback, likeCallback) => {
   cardImageEl.src = link;
   cardImageEl.alt = `${name}`;
 
+  cardImageEl.addEventListener('click', () => { zoomCallback(name, link); });
   cardDeleteButton.addEventListener('click', () => { removeCallback(cardEl); });
   cardLikeButton.addEventListener('click', () => { likeCallback(cardLikeButton); });
 

@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { initialCards } from './components/cards';
 import { createCard, removeCard, likeCard } from './components/card';
-import { openModal, closeModal } from './components/modal';
+import { openModal, closeModal, handleCloseButton, handleOverlayClick } from './components/modal';
 
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
@@ -23,6 +23,7 @@ const popupImageModalImage = document.querySelector('.popup__image');
 const popupImageModalCaption = document.querySelector('.popup__caption');
 
 const placesList = document.querySelector('.places__list');
+const popupList = document.querySelectorAll('.popup');
 
 profileEditButton.addEventListener('click', () => {
   fillProfileData();
@@ -37,11 +38,13 @@ newCardAddButton.addEventListener('click', () => {
 
 newCardForm.addEventListener('submit', handleNewCardSubmit);
 
-placesList.addEventListener('click', evt => {
-  if (evt.target.classList.contains('card__image')) {
-    fillImage(evt.target);
-    openModal(popupImageModal);
-  }
+popupList.forEach(popup => {
+  const popupCloseButton = popup.querySelector('.popup__close');
+  popupCloseButton.addEventListener('click', () => {
+    handleCloseButton(popup);
+  });
+
+  popup.addEventListener('click', handleOverlayClick);
 });
 
 function handleEditFormSubmit(evt) {
@@ -56,7 +59,7 @@ function handleNewCardSubmit(evt) {
   evt.preventDefault();
   const cardName = newCardModalName.value;
   const cardUrl = newCardModalUrl.value;
-  const card = createCard(cardUrl, cardName, removeCard, likeCard);
+  const card = createCard(cardUrl, cardName, removeCard, likeCard, handleZoomImage);
   placesList.prepend(card);
 
   closeModal(newCardModal);
@@ -68,17 +71,17 @@ const fillProfileData = () => {
   editProfileModalDescriptionEl.value = profileDescription.innerText;
 };
 
-const fillImage = (target) => {
-  popupImageModalImage.src = target.src;
-  popupImageModalImage.alt = target.alt;
-  popupImageModalCaption.textContent = target.alt;
-}
+const handleZoomImage = (title, link) => {
+  popupImageModalImage.src = link;
+  popupImageModalImage.alt = title;
+  popupImageModalCaption.textContent = title;
+  openModal(popupImageModal);
+};
 
 const initCards = initialCards => {
   initialCards.forEach(card => {
-    placesList.append(createCard(card.link, card.name, removeCard));
+    placesList.append(createCard(card.link, card.name, removeCard, likeCard, handleZoomImage));
   });
 }
 
 initCards(initialCards);
-
