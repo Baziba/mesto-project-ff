@@ -47,5 +47,4 @@ const closeModal = (el) => {
   el.classList.remove('popup_is-opened');
 }
 
-
 export { openModal, closeModal, handleCloseButton, handleOverlayClick }
